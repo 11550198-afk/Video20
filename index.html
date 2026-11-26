@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>考試該不該猜題?</title>
+<style>
+:root{--bg:#eef1f6;--ink:#1b2a41;--mute:#5b6b82;--card:#ffffff;--lead:#2b2d33;--ok:#1f8a5b;--bad:#d6455d;--line:#c9d1de;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b27;--ink:#e8edf5;--mute:#98a6bb;--card:#1e2736;--lead:#e8edf5;--ok:#4fd19a;--bad:#ff7088;--line:#37445a}}
+:root[data-theme="dark"]{--bg:#141b27;--ink:#e8edf5;--mute:#98a6bb;--card:#1e2736;--lead:#e8edf5;--ok:#4fd19a;--bad:#ff7088;--line:#37445a}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+#stage{flex:1;position:relative;min-height:0}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center;opacity:0;pointer-events:none;transition:opacity .5s}
+.scene.on{opacity:1}
+h1{font-size:clamp(30px,7vw,64px);margin:0;line-height:1.25;font-weight:800}
+.big{font-size:clamp(26px,6vw,56px);font-weight:800;line-height:1.3}
+.sub{font-size:clamp(16px,2.6vw,24px);color:var(--mute);margin:0}
+.sheet{display:flex;gap:18px}
+.b{width:clamp(48px,9vw,84px);aspect-ratio:1;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:clamp(18px,3vw,30px);transition:all .6s}
+.b.x{background:var(--bad);border-color:var(--bad);color:#fff;opacity:.55;text-decoration:line-through}
+.b.pick{background:var(--lead);color:var(--bg)}
+.q{font-size:clamp(60px,12vw,120px);font-weight:800;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.vars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:560px;width:100%}
+.vars div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;font-size:clamp(16px,2.6vw,22px);opacity:0;transform:translateY(10px)}
+.scene.on .vars div{animation:in .5s forwards}
+.scene.on .vars div:nth-child(2){animation-delay:1.2s}.scene.on .vars div:nth-child(3){animation-delay:2.4s}.scene.on .vars div:nth-child(4){animation-delay:3.6s}
+@keyframes in{to{opacity:1;transform:none}}
+.f{font-size:clamp(20px,4.4vw,44px);font-weight:700;line-height:1.6}
+.f .g{color:var(--ok)}.f .r{color:var(--bad)}
+.f span{opacity:0;transition:opacity .6s}.f span.show{opacity:1}
+table{border-collapse:collapse;font-size:clamp(20px,4vw,38px);min-width:min(100%,420px)}
+th,td{padding:10px 22px;border-bottom:2px solid var(--line)}
+th{color:var(--mute);font-weight:600}
+tr.h{opacity:0;transition:opacity .6s}tr.h.show{opacity:1}
+td.v{font-weight:800;color:var(--ok)}
+.rule{background:var(--card);border:3px solid var(--ok);border-radius:14px;padding:18px 26px;font-size:clamp(22px,5vw,50px);font-weight:800;color:var(--ok)}
+#cap{min-height:96px;padding:14px 20px;background:var(--card);border-top:1px solid var(--line);text-align:center;font-size:clamp(16px,3vw,26px);line-height:1.5;display:flex;align-items:center;justify-content:center}
+#bar{height:6px;background:var(--line)}#bar i{display:block;height:100%;width:0;background:var(--ok)}
+#start{position:absolute;inset:0;z-index:5;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
+button{font:inherit;font-weight:700;font-size:20px;padding:14px 34px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+button:focus-visible{outline:3px solid var(--ok);outline-offset:3px}
+label{font-size:16px;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){.q{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+ <div id="start">
+  <h1>考試該不該猜題?</h1>
+  <p class="sub">60 秒期望值短片,可直接螢幕錄影</p>
+  <button id="go">開始播放</button>
+  <label><input type="checkbox" id="voice" checked> 開啟語音旁白(繁體中文)</label>
+ </div>
+
+ <section class="scene" id="s0">
+  <div class="q">?</div>
+  <div class="sheet"><div class="b">A</div><div class="b">B</div><div class="b">C</div><div class="b">D</div></div>
+  <h1>不會的選擇題,猜還是留白?</h1>
+ </section>
+
+ <section class="scene" id="s1">
+  <div class="big">建立模型</div>
+  <div class="vars"><div>四選一:N = 4</div><div>答對 +S = 2</div><div>答錯 −P = 0.5</div><div>留白 = 0</div></div>
+  <p class="sub">能排除 k 個錯誤選項,剩下的隨機猜</p>
+ </section>
+
+ <section class="scene" id="s2">
+  <div class="f">
+   <span id="f1">猜中機率 = 1 ⁄ (N−k)</span><br>
+   <span id="f2">猜錯機率 = (N−k−1) ⁄ (N−k)</span><br>
+   <span id="f3">E = <b class="g">S ⁄ (N−k)</b> − <b class="r">(N−k−1) ⁄ (N−k) × P</b></span>
+  </div>
+ </section>
+
+ <section class="scene" id="s3">
+  <table>
+   <tr><th>排除 k</th><th>期望值 E</th></tr>
+   <tr class="h"><td>0</td><td class="v">+0.125</td></tr>
+   <tr class="h"><td>1</td><td class="v">+0.33</td></tr>
+   <tr class="h"><td>2</td><td class="v">+0.75</td></tr>
+   <tr class="h"><td>3</td><td class="v">+2.00</td></tr>
+  </table>
+  <p class="sub">全部大於留白的 0</p>
+ </section>
+
+ <section class="scene" id="s4">
+  <div class="rule">S &gt; (N−k−1) × P → 猜!</div>
+  <p class="sub">四選一完全不會時,倒扣超過 2⁄3 分,才不值得猜</p>
+ </section>
+
+ <section class="scene" id="s5">
+  <div class="sheet"><div class="b x" id="e1">A</div><div class="b" id="e2">B</div><div class="b x" id="e3">C</div><div class="b" id="e4">D</div></div>
+  <h1>先排除,再猜,長期多拿分</h1>
+ </section>
+</div>
+<div id="cap"></div>
+<div id="bar"><i></i></div>
+
+<script>
+var T=[
+ {t:0,n:"不會寫的選擇題,該猜還是留白?答案不是靠運氣,是靠數學期望值!"},
+ {t:8,n:"假設四選一,答對得 2 分,答錯倒扣 0.5 分,留白 0 分。我能排除 k 個錯誤選項,剩下的隨機猜。"},
+ {t:20,n:"猜中的機率是 N 減 k 分之一,猜錯的機率是 N 減 k 減 1,除以 N 減 k。期望值就是猜中的得分,減掉猜錯的扣分。"},
+ {t:32,n:"代入數字,連一個都不會排除,期望值也有正 0.125,大於留白的 0。排除越多,越划算。"},
+ {t:45,n:"重點公式:只要答對得分,大於剩下錯誤選項數乘以倒扣分,就該猜。"},
+ {t:55,n:"沒倒扣就一定猜;有倒扣,先排除再猜。長期下來,你會比留白多拿分!"}
+];
+var END=60,timers=[],t0=0,raf=0;
+var cap=document.getElementById("cap"),bar=document.querySelector("#bar i");
+function later(ms,fn){timers.push(setTimeout(fn,ms*1000))}
+function speak(s){
+  if(!document.getElementById("voice").checked||!window.speechSynthesis)return;
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(s);u.lang="zh-TW";u.rate=1.05;speechSynthesis.speak(u)}catch(e){}
+}
+function reset(){
+  timers.forEach(clearTimeout);timers=[];cancelAnimationFrame(raf);
+  document.querySelectorAll(".scene").forEach(function(s){s.classList.remove("on")});
+  document.querySelectorAll(".f span,tr.h").forEach(function(e){e.classList.remove("show")});
+  ["e1","e3"].forEach(function(i){document.getElementById(i).classList.add("x")});
+  document.getElementById("e2").classList.remove("pick");
+  try{speechSynthesis.cancel()}catch(e){}
+}
+function show(i){
+  document.querySelectorAll(".scene").forEach(function(s){s.classList.remove("on")});
+  document.getElementById("s"+i).classList.add("on");
+  cap.textContent=T[i].n;speak(T[i].n);
+}
+function tick(){
+  var p=(performance.now()-t0)/1000;bar.style.width=Math.min(100,p/END*100)+"%";
+  if(p<END)raf=requestAnimationFrame(tick);
+}
+function play(){
+  reset();
+  document.getElementById("start").style.display="none";
+  t0=performance.now();tick();
+  T.forEach(function(sc,i){later(sc.t,function(){show(i)})});
+  later(22,function(){document.getElementById("f1").classList.add("show")});
+  later(25,function(){document.getElementById("f2").classList.add("show")});
+  later(28,function(){document.getElementById("f3").classList.add("show")});
+  document.querySelectorAll("tr.h").forEach(function(r,i){later(34+i*2.5,function(){r.classList.add("show")})});
+  later(57,function(){document.getElementById("e2").classList.add("pick")});
+  later(END,function(){
+    var st=document.getElementById("start");st.style.display="flex";
+    document.getElementById("go").textContent="重新播放";
+  });
+}
+document.getElementById("go").addEventListener("click",play);
+</script>
+</body>
+</html>
